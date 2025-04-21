@@ -1,5 +1,12 @@
 <resources>
     <string name="app_name">CalculatorApp</string>
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="str_number_calc">0</string>
+    <string name="str_show_tools_text_calc"><![CDATA[123 456 789.00]]></string>
+
+
+    <!--    disini teroh menu string-->
+    <string name="str_title_calc">Calc</string>
+    <string name="str_menu_person">Person</string>
+    <string name="str_uai_menu_stuff_bingung_kenapa_disini">UAI</string>
 </resources>

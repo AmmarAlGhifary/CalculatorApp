@@ -5,19 +5,19 @@
     <item
         android:id="@+id/menu_calculator"
         android:icon="@drawable/ic_calculate_24"
-        android:title="Calc"
+        android:title="@string/str_title_calc"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/menu_person"
         android:icon="@drawable/ic_profile_24"
-        android:title="Person"
+        android:title="@string/str_menu_person"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/menu_uai"
         android:icon="@drawable/uai_logo"
-        android:title="UAI"
+        android:title="@string/str_uai_menu_stuff_bingung_kenapa_disini"
         app:showAsAction="ifRoom" />
 
 </menu>
