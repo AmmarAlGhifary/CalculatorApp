@@ -3,14 +3,14 @@ package com.uai.calculatorapp.view
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.appcompat.view.menu.MenuView.ItemView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
 import com.uai.calculatorapp.R
+import com.uai.calculatorapp.R.color.calc_digit
 
 class CalcAdapter(
-    private val keys: List<CalcButton>,
+    private val keys: List<PadKeys>,
     private val onKeyClick: (String) -> Unit
 ) : RecyclerView.Adapter<CalcAdapter.ViewHolder>() {
 
@@ -26,15 +26,18 @@ class CalcAdapter(
 
     override fun getItemCount(): Int = keys.size
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val btnLabel : MaterialButton = itemView.findViewById(R.id.btn_numberKeyPad)
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val btnLabel: MaterialButton = itemView.findViewById(R.id.btn_key)
 
-        fun bind(itemView: CalcButton) {
-            btnLabel.text = itemView.toString()
+        fun bind(item: PadKeys) {
+            btnLabel.text = item.label
+            val colorId = if (item.isOperator) R.color.calc_operator else calc_digit
+            btnLabel.setTextColor(ContextCompat.getColor(itemView.context, colorId))
             btnLabel.setOnClickListener {
-//                on
+                onKeyClick(item.label)
             }
         }
+
     }
 }
 

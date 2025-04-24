@@ -11,4 +11,7 @@
     <color name="blue900">#254F84</color>
     <color name="blue950">#153F75</color>
     <color name="white">#FFFFFF</color>
+
+    <color name="calc_digit">#6200EE</color>
+    <color name="calc_operator">#FF5722</color>
 </resources>
