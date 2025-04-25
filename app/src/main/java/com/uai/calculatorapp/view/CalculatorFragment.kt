@@ -1,6 +1,7 @@
 package com.uai.calculatorapp.view
 
 import android.os.Bundle
+import android.text.TextUtils
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -24,14 +25,16 @@ class CalculatorFragment : Fragment() {
 
     private val display = StringBuilder()
     private lateinit var tvDisplay: TextView
+    private lateinit var tvExpression: TextView
+
+    private var firstOperand: Double? = null
+    private var currentOperator: String? = null
 
     private lateinit var listNumber: RecyclerView
 
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View = inflater.inflate(R.layout.fragment_calculator, container, false)
 
 
@@ -46,14 +49,22 @@ class CalculatorFragment : Fragment() {
         btnSubtract = view.findViewById(R.id.btn_subtract)
         btnAdd = view.findViewById(R.id.btn_add)
         btnEquals = view.findViewById(R.id.btn_equals)
+
         tvDisplay = view.findViewById(R.id.tv_mainNumber)
+        tvExpression = view.findViewById(R.id.tv_expression)
 
         listNumber = view.findViewById(R.id.recyclerPad)
 
         val padKeys = listOf(
-            PadKeys("7"), PadKeys("8"), PadKeys("9"),
-            PadKeys("4"), PadKeys("5"), PadKeys("6"),
-            PadKeys("1"), PadKeys("2"), PadKeys("3"),
+            PadKeys("7"),
+            PadKeys("8"),
+            PadKeys("9"),
+            PadKeys("4"),
+            PadKeys("5"),
+            PadKeys("6"),
+            PadKeys("1"),
+            PadKeys("2"),
+            PadKeys("3"),
             PadKeys("0", span = 2),
             PadKeys(".", isOperator = false)
         )
@@ -71,6 +82,39 @@ class CalculatorFragment : Fragment() {
             }
             setHasFixedSize(true)
         }
+
+        btnClear.setOnClickListener {
+            clearAll()
+        }
+
+        btnClearChar.setOnClickListener {
+            clearChar()
+        }
+
+        btnPercentage.setOnClickListener {
+            percentage()
+        }
+
+        btnDivision.setOnClickListener {
+            division()
+        }
+
+        btnMultiply.setOnClickListener {
+            multiply()
+        }
+
+        btnSubtract.setOnClickListener {
+            subtract()
+        }
+
+        btnAdd.setOnClickListener {
+            plus()
+        }
+
+        btnEquals.setOnClickListener {
+            equals()
+        }
+
     }
 
     private fun onPadPressed(label: String) {
@@ -86,34 +130,89 @@ class CalculatorFragment : Fragment() {
 
 
     private fun equals() {
-        TODO("Not yet implemented")
+        val op = currentOperator ?: return
+        val left = firstOperand ?: return
+        val right = display.toString().toDoubleOrNull() ?: return
+        val result = when (op) {
+            "+" -> left + right
+            "-" -> left - right
+            "x" -> left * right
+            "÷"  -> if (right == 0.0) Double.NaN else left / right
+            else -> Double.NaN
+        }
+        tvExpression.text = "${left.stripTrailingZeros()} $op ${right.stripTrailingZeros()} ="
+        display.clear().append(result.stripTrailingZeros())
+        tvDisplay.text = display
+
+        // reset state
+        firstOperand = null
+        currentOperator = null
+//        if (firstOperand != null && currentOperator != null) {
+//            val secondOperand = display.toString().toDoubleOrNull() ?: 0.0
+//            tvExpression.text = tvExpression.text.toString() + " " + secondOperand + " ="
+//            val result = when (currentOperator) {
+//                "+" -> firstOperand!! + secondOperand
+//                else -> 0.0
+//            }
+//            display.clear()
+//            display.append(result.toString())
+//            tvDisplay.text = display
+//            firstOperand = null
+//            currentOperator = null
+//        }
     }
 
-    private fun plus() {
+    private fun plus() = commitOperator("+")
+//        if (display.isNotEmpty()) {
+//            firstOperand = display.toString().toDoubleOrNull()
+//            currentOperator = "+"
+//            tvExpression.text = display.toString() + "  $currentOperator"
+//            display.clear()
+//            tvDisplay.text = ""
+//        }
+//    }
 
-    }
+    private fun subtract() =  commitOperator("-")
 
-    private fun subtract() {
-        TODO("Not yet implemented")
-    }
+    private fun multiply() = commitOperator("x")
 
-    private fun multiply() {
-        TODO("Not yet implemented")
-    }
-
-    private fun division() {
-        TODO("Not yet implemented")
-    }
+    private fun division() = commitOperator("÷")
 
     private fun percentage() {
-        TODO("Not yet implemented")
+        if (display.isEmpty()) return
+        val value = display.toString().toDouble() / 100.0
+        display.clear().append(value.stripTrailingZeros())
+        tvDisplay.text = display
     }
 
     private fun clearChar() {
-        TODO("Not yet implemented")
+//        var display = tvDisplay.text.toString()
+        if (display.isNotEmpty()) {
+//            display =
+            display.deleteCharAt(display.length - 1)
+            tvDisplay.text = display
+        }
     }
 
     private fun clearAll() {
-        TODO("Not yet implemented")
+        display.clear()
+        firstOperand = null
+        currentOperator = null
+        tvExpression.text = ""
+        tvDisplay.text = ""
     }
+
+    private fun commitOperator(op: String) {
+        if (display.isEmpty()) return
+
+        firstOperand = display.toString().toDoubleOrNull()
+        currentOperator = op
+        tvExpression.text = "${firstOperand?.stripTrailingZeros()}  $op"
+        display.clear()
+        tvDisplay.text = ""
+    }
+
+    private fun Double.stripTrailingZeros(): String =
+        if (this % 1 == 0.0) this.toInt().toString() else toString()
 }
+

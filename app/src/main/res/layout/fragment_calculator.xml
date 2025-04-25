@@ -22,6 +22,16 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@string/str_show_tools_text_calc" />
 
+    <TextView
+        android:id="@+id/tv_expression"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="start"
+        android:textAlignment="textEnd"
+        app:layout_constraintBottom_toTopOf="@+id/tv_mainNumber"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelinePad"
         android:layout_width="wrap_content"
